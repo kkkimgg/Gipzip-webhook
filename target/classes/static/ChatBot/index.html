@@ -1,0 +1,782 @@
+  <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"> <!-- 이게 있어야, 결과가 카드안에서 보임. -->
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes, initial-scale=1.0">
+<title>GipZip</title>
+<link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+  <!-- 네비게이션 바 -->
+  <header>
+    <nav id="gn-nav">
+      <div class="gn-content">
+        <a href="/Intro/index.html">
+          <img src="/img/GibZiplogo_black.png" height="40" alt="gipziplogo" id="homelogo">
+        </a>
+        <ul class="gn-list" id="list">
+          <li><a href="/">AI 집</a></li>
+          <li><a href="/Design/index.html">온라인 임장</a></li>
+          <li><a href="/ChatBot/index.html">챗봇 zip</a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+
+
+
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>부동산 추천 챗봇</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: -20px auto;
+      padding: 0;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #f7f7fa;
+      color: #222;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* 상단 보라색 배경 */
+    .header-bg {
+      width: 100%;
+      height: 450px;
+      min-height: 120px; /* 너무 작아지지 않게 최소값 */
+      background: linear-gradient(135deg, #8357ca 0%, #6a47b3 100%);
+      position: relative;
+      z-index: 1;
+      transition: height 0.3s;
+      background-image: url('/img/챗봇_back.png');
+      background-size: cover;
+    }
+    .header {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      margin-top: -250px;
+      padding-top: 0;
+      text-align: center;
+      padding-left: 40px;
+      padding-right: 40px;
+      padding-bottom: 40px;
+    }
+    .header h1 {
+      font-size: 2.7rem;
+      margin-bottom: 0.2em;
+      color: #fff;
+      letter-spacing: 2px;
+      font-weight: 800;
+      margin-top: 0;
+    }
+    .header p {
+      font-size: 1.15rem;
+      color: #e0dff5;
+      margin: 0 0 20px 0;
+      max-width: 600px;
+      line-height: 1.5;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 카드 리스트 전체 컨테이너 */
+    .hot-section {
+      max-width: 1200px;
+      margin: 10px auto 40px auto;
+      padding: 95px 40px 0 40px;;
+      position: relative;
+      z-index: 1;
+    }
+    .hot-section h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #5e35b1;
+      margin-bottom: 22px;
+      margin-top: 0;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #c6b7e6;
+      padding-bottom: 8px;
+    }
+
+    /* 가로형 카드 리스트 */
+    /* .property-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      justify-content: center;
+    } */
+    .property-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3개씩 한 줄 */
+    gap: 32px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    }
+
+    .property-item {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(131,87,202,0.11), 0 1.5px 5px rgba(80, 80, 120, 0.07);
+      display: flex;
+      flex-direction: column;
+      width: 340px;
+      min-width: 270px;
+      max-width: 100%;
+      padding: 0;
+      overflow: hidden;
+      border: 1.5px solid #ece6fa;
+      transition: box-shadow 0.2s, border 0.2s;
+      position: relative;
+    }
+    .property-item:hover {
+      box-shadow: 0 8px 32px rgba(131,87,202,0.18), 0 4px 10px rgba(80, 80, 120, 0.11);
+      border: 1.5px solid #a389d4;
+    }
+    .property-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background: #eee;
+      border-bottom: 1px solid #ece6fa;
+      display: block;
+    }
+    .property-info {
+      padding: 18px 18px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .property-title {
+      font-weight: 700;
+      font-size: 1.13rem;
+      color: #220e4b;
+      margin-bottom: 2px;
+    }
+    .property-meta {
+      font-size: 0.98rem;
+      color: #555;
+      margin-bottom: 2px;
+    }
+    .property-desc {
+      font-size: 0.95rem;
+      color: #7a6e99;
+      line-height: 1.45;
+    }
+
+
+
+
+
+  /* 인기 지역 리스트 */
+  .popular-section {
+    max-width: 1200px;
+    margin: 150px auto 80px auto;
+    padding: 0 40px;
+  }
+
+  /* 인기 지역 제목 */
+  .popular-section h2 {
+    font-size: 1.6rem;
+    color: #5e35b1;
+    margin-bottom: 30px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    position: relative;
+    padding-left: 8px;
+    margin-bottom: 15px;
+  }
+
+  .popular-section h2::after {
+  content: "";
+  display: block;
+  margin: auto;
+  margin-top: 8px;        /* 제목과 선 사이 추가 간격 */
+  width: 920px;           /* 밑줄(직선) 길이, 원하는 값으로 */
+  border-bottom: 2px solid #c6b7e6; /* 색상/두께 조절 */
+  border-radius: 2px;
+  }
+
+  /* 인기 지역 아이템 리스트 */
+  .popular-regions {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
+    gap: 8px;
+    justify-content: center; /* 왼쪽 정렬 */
+    max-width: 900px; /* 최대 너비 제한으로 좌측 정렬 유지 */
+  }
+
+  /* 인기 지역 개별 아이템 */
+ .region-item {
+  min-width: 180px;
+  max-width: 100%;
+  height: 50px;
+  line-height: 48px;
+  display: inline-block;
+  text-align: center;     /* 텍스트 가운데 */
+  padding: 0;
+  margin: 0; /* 간격 조절*/
+  box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 0 12px rgba(131, 87, 202, 0.18);
+  white-space: nowrap;
+}
+  .region-item:hover {
+    background: #6a47b3;
+  }
+
+
+
+    .hot-section .property-item,
+    .popular-section .property-item {
+      cursor: pointer;
+    }
+
+  
+
+
+    /* 반응형 */
+    @media (max-width: 1024px) {
+      .hot-section, .popular-section, .header {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .property-list {
+        gap: 15px;
+      }
+      .property-item {
+        width: 100%;
+        min-width: 0;
+      }
+    }
+    @media (max-width: 900px) {
+      .property-list{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+      }
+    }
+    @media (max-width: 700px) {
+      .header-bg { height: 320px; }
+      .header { margin-top: -190px; }
+      .property-list { flex-direction: column; gap: 18px; }
+      .property-item { width: 100%; }
+      .popular-section { margin-top: 100px; }
+      .popular-regions{
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+      /* .property-list{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        justify-content: center;
+      } */
+    }
+
+  /* 챗봇은 오른쪽 하단에만 고정 */
+  df-messenger {
+    --df-messenger-chat-window-width: 370px !important;
+    --df-messenger-chat-window-height: 500px !important;
+    --df-messenger-chat-border-radius: 16px !important;
+    --df-messenger-font-size: 18px !important;
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    left: auto !important;
+    top: auto !important;
+    z-index: 9999;
+  }
+  df-messenger-chat-bubble {
+  --df-messenger-chat-bubble-size: 64px !important;
+  --df-messenger-chat-bubble-background: #6a47b3 !important;
+  --df-messenger-chat-bubble-border-radius: 32px !important;
+  --df-messenger-chat-bubble-icon-size: 36px !important;
+}
+
+
+
+  /* 모바일 대응 */
+  @media (max-width: 600px) {
+    df-messenger {
+      --df-messenger-chat-window-width: 98vw !important;
+      --df-messenger-chat-window-height: 70vh !important;
+      --df-messenger-chat-border-radius: 10px !important;
+    }
+  }
+  @media (max-width: 400px) {
+    df-messenger {
+      --df-messenger-chat-window-width: 100vw !important;
+      --df-messenger-chat-window-height: 80vh !important;
+      --df-messenger-chat-border-radius: 0 !important;
+    }
+  }
+
+
+
+/* 하단바 */
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background: #f5f5f5;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2.2rem 7vw 1.2rem 7vw;
+  font-size: 0.98rem;
+  font-weight: 300;
+  gap: 32px;
+  white-space: nowrap;
+}
+
+.footer-left {
+  text-align: left;
+  line-height: 1.7;
+  /* 필요하면 width: 60%; 등으로 조정 가능 */
+}
+
+.footer-bottom-row {
+  display: flex;
+  align-items: flex-end;
+  flex-grow: 1;
+  min-width: 260px;
+  justify-content: flex-end;
+}
+
+.footer-copyright {
+  white-space: nowrap;
+  text-align: right;
+  font-size: 0.98rem;
+    margin: auto -5px 0 0;
+  /* margin: top right bottom left; */
+}
+@media (max-width: 600px) {
+  .footer-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 1.2rem 2vw 0.7rem 2vw;
+    font-size: 0.95rem;
+  }
+  .footer-bottom-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .footer-copyright {
+    text-align: left;
+    margin-top: 4px;
+  }
+}
+
+
+  .container {
+    max-width: 900px;
+    margin: 100px auto;
+    padding: 0 20px;
+  }
+  #mainForm {
+    margin-top: 50px; /* 원하는 만큼 조절 가능 */
+  }
+
+  /* 챗봇 팝업 색상 */
+  df-messenger {
+      --df-messenger-primary-color: #6a47b3;
+      --df-messenger-button-titlebar-color: #6a47b3;
+      --df-messenger-chat-background-color: #ffffff;
+      --df-messenger-font-color: #333333;
+      --df-messenger-send-icon: #8357ca;
+      --df-messenger-user-message: #e3e3e3;
+      --df-messenger-bot-message: #ede7f6;
+    }
+
+    /* 버튼 */
+    df-messenger {
+    --df-messenger-button-border-color: #8357ca;
+    --df-messenger-chat-background-color: #fafafa;
+    --df-messenger-send-icon: #8357ca;
+  }
+  
+  /* 버튼 시각화 강화 */
+  df-messenger df-chips-wrapper div.chip-container {
+    background-color: #8357ca !important;
+    color: white !important;
+    border: 1px solid #6a47b3 !important;
+    padding: 8px 12px !important;
+    margin: 4px !important;
+  }
+
+
+
+
+    /* 인기 지역, Top3 Zip, 이달의 지역별 핫한 Zip 제목 글씨 검정 */
+  .popular-section h2,
+  .hot-section h2 {
+    color: #222 !important;  /* 진한 검정 */
+    background: transparent;
+  }
+
+  /* 2. 인기지역 리스트(서울시 강남구 등) 글씨 검정, 배경 흰색/불투명 */
+  .region-item {
+  background: rgba(255,255,255,0.85); 
+  color: #222 !important; 
+  border: 1.0px solid #eeeeee;
+  transition: background 0.2s, border 0.2s;
+}
+  .region-item:hover {
+    background: rgba(219, 218, 218, 0.95);
+    border: 1.5px solid #a389d4;
+  }
+
+
+/* 네비게이터 */
+#homelogo{ 
+  font-size: 1.375rem;
+  font-weight: bold;
+  color:#ffffff;
+  display:inline-block;
+  margin-top:2.75vh;
+  margin-left: 5.625rem;
+    z-index: 9999;
+}
+  #gn-nav{
+  font-family: 'Pretendard';
+    position:fixed;
+    display:block;
+    z-index:9999;
+    top:0;right:0;left:0;width:100%;
+    min-width:1024px;
+    height: 80px;
+    background-color: rgba(255, 255, 255, 0.8); /*이게 흰색 불투명 배경 코드*/
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  }
+  #gn-nav.gn-content{
+      max-width:980px;
+      height:100%;
+      margin-right:auto;
+      margin-left:auto;
+      padding-right:22px;
+      padding-left:22px;
+      padding-left:calc(max(22px, env(safe-area-inset-left)));
+      padding-right:calc(max(22px, env(safe-area-inset-right)));
+  }
+  #gn-nav .gn-list{
+      width:auto;
+      height:100%;
+      margin-right:5%;
+      margin-top:2.75vh;
+      float:right;
+  }
+  #gn-nav .gn-list li{
+    display:inline-block;
+    height:100%;
+    vertical-align:top; 
+    padding-right: 4px;
+  }
+  #gn-nav .gn-list li a{
+    display:inline-block;
+    height:100%;
+    padding: 5px 18px;
+    color:#353535;
+    font-size:1.2rem;
+    font-weight: 300;
+    text-decoration: none; 
+  }
+  #gn-nav .gn-list li a:hover{
+    border-radius: 30px;
+    background-color: #eeeeee;
+    font-weight: 400;
+    /* color: #FF6339; */
+  }
+
+
+
+
+
+
+
+#topBtn {
+  display: none;              /* 기본은 숨김 */
+  position: fixed;
+  bottom: 8rem;
+  right: 2rem;
+  z-index: 10001;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: #6A5ACD;
+  color: #fff;
+  font-size: 2rem;
+  box-shadow: 0 2px 8px rgba(106,90,205,0.12);
+  cursor: pointer;
+  opacity: 0.85;
+  transition: background 0.2s, opacity 0.2s;
+}
+#topBtn:hover {
+  background: #483D8B;
+  opacity: 1;
+}
+
+
+
+/* 네비게이터 높이(px)에 맞게 조절 */
+  .popular-section {
+    scroll-margin-top: 160px;
+  }
+
+
+
+
+
+
+
+
+  </style>
+
+
+
+
+
+</head>
+<body>
+  <div class="header-bg"></div>
+  <div class="header">
+    <h1>챗봇 Zip</h1>
+    <p>
+      AI가 분석한 <strong>지역별 핫한 매물</strong>과<br>
+      <strong>인기 지역</strong>을 한눈에 확인할 수 있어요.<br>
+      챗봇에게 원하는 지역의 집도 추천받아보세요!
+    </p>
+  </div>
+
+
+  <section class="popular-section">
+    <h2>인기 지역</h2>
+    <ul class="popular-regions">
+      <li class="region-item">서울특별시 강남구</li>
+      <li class="region-item">부산광역시 해운대구</li>
+      <li class="region-item">경기도 성남시 분당구</li>
+      <li class="region-item">서울특별시 송파구</li>
+      <li class="region-item">인천광역시 연수구</li>
+      <li class="region-item">대구광역시 수성구</li>
+      <li class="region-item">경기도 용인시 수지구</li>
+      <li class="region-item">서울특별시 용산구</li>
+    </ul>
+  </section>
+
+  <!-- 인기지역 클릭시 핫매물 카드가 나타날 자리 -->
+  <div id="region-hot-list"></div>
+
+  <section class="hot-section">
+    <h2>이달의 지역별 핫한 Zip</h2>
+    <ul class="property-list">
+      <!-- 예시 매물 카드 (이미지, 제목, 메타, 설명) -->
+      <li class="property-item">
+        <img class="property-img" src="/img/서울_래미안대치팰리스_외부.jpg" alt="래미안대치팰리스" />
+        <div class="property-info">
+          <div class="property-title">래미안 대치팰리스</div>
+          <div class="property-meta">서울특별시 강남구 대치동 963 · 아파트 · 84m² (25평)</div>
+          <div class="property-desc">22억 5,000만원 · 대치역 도보 3분, 학원가, 대형마트, 공원 인접</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/용인_동천자이_외부.jpg" alt="수지동천자이" />
+        <div class="property-info">
+          <div class="property-title">동천 파크자이</div>
+          <div class="property-meta">경기도 용인시 수지구 동천동 855 · 아파트 · 84m² (25평)</div>
+          <div class="property-desc">10억 2,000만원 · 동천역 7분, 이마트, 수지구청, 산책로</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/강원_속초롯데캐슬인더스카이_외부.jpeg" alt="속초 롯데캐슬인더스카이" />
+        <div class="property-info">
+          <div class="property-title">속초 롯데캐슬 인더스카이</div>
+          <div class="property-meta">강원특별자치도 속초시 동명동 599 · 아파트 · 84.98m² (25.7평)</div>
+          <div class="property-desc">4억 2,000만원 · 속초시외버스터미널 도보 5분 · 초중고 인근, KTX 속초역 예정(2027년 완공)</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/충북_충주푸르지오2차_외부.jpeg" alt="충주 푸르지오2차" />
+        <div class="property-info">
+          <div class="property-title">충주 2차 푸르지오</div>
+          <div class="property-meta">충청북도 충주시 안림동 1171 · 아파트 · 84.94m² (25.7평)</div>
+          <div class="property-desc">4억 500만원 (2025년 1월 실거래가 기준) · 초/중학교 도보권 · 버스 정류장 인접, 편의시설 및 커뮤니티 공간 </div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/충남_아산 칸타빌 센트럴시티.jpeg" alt="아산 칸타빌 센트럴시티" />
+        <div class="property-info">
+          <div class="property-title">아산 칸타빌 센트럴시티</div>
+          <div class="property-meta">충청남도 아산시 배방읍 · 주상복합 · 약 84m² (25평)</div>
+          <div class="property-desc">2억 4,500만원 · 신축, 편리한 교통, 다양한 커뮤니티 시설, 대형마트 인접</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/전북_전주2층단독주택.jpg" alt="전북 전주시 완산구 효자동1가 단독 2층 주택" />
+        <div class="property-info">
+          <div class="property-title">전라북도 전주시 완산구 효자동1가 단독 2층 주택</div>
+          <div class="property-meta">전북 전주시 완산구 효자동1가 · 단독주택 · 118.5m² / 199.48m²</div>
+          <div class="property-desc">매매 3억 8,000만원 (386만원/3.3㎡) · 남향, 올 리모델링, 태양광 설치, 중심지 위치 </div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/전남_골드클래스시그니처.jpeg" alt="순천 골드클래스시그니처" />
+        <div class="property-info">
+          <div class="property-title">골드클래스 시그니처</div>
+          <div class="property-meta">전라남도 순천시 조례동 528 · 아파트 · 84.77m² (25.6평)</div>
+          <div class="property-desc">4억 1,000만원 (2025년 1월 기준 실거래가) · 우수 학군 인근, 홈플러스/이마트/NC백화점 인접, 순천병원/미즈아동병원/도서관 인근, 봉화산 둘레길</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/경북_포항자이애서턴.jpeg" alt="포항자이애서턴" />
+        <div class="property-info">
+          <div class="property-title">포항자이애서턴</div>
+          <div class="property-meta">경상북도 포항시 북구 학잠동 93-4번지 · 아파트 · 84.92m² (25.7평)</div>
+          <div class="property-desc">4억 9,000만원 · 대형마트 및 재래시장 인접, 우수 학군, 7번/31번 국도 접근성 우수, 포항고속버스터미널/시외버스터미널/KTX포항역 인접, 포항 철길숲 산책로, 탑산</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/경남_창원 노블파크.jpg" alt="창원 노블파크" />
+        <div class="property-info">
+          <div class="property-title">노블파크 아파트</div>
+          <div class="property-meta">경상남도 창원시 성산구 반림동 10 · 아파트 · 84m² (25평)</div>
+          <div class="property-desc">5억 5,000만원 · 반송초 도보 4분 · 대형마트 차량 5분 · 백화점 차량 7분</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/제주_삼화부영.jpeg" alt="제주 삼화부영아파트" />
+        <div class="property-info">
+          <div class="property-title">삼화사랑으로부영 2차아파트</div>
+          <div class="property-meta">제주특별자치도 제주시 삼화지구로 18 · 아파트 · 84m² (25평)</div>
+          <div class="property-desc">4억 1,000만원 · 제주국제공항 차량 20분, 중심상가 인근</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/부산_해운대 엘시티 더샵.jpeg" alt="해운대 엘시티 더샵" />
+        <div class="property-info">
+          <div class="property-title">엘시티</div>
+          <div class="property-meta">부산광역시 해운대구 우동 · 아파트 · 112m² (34평)</div>
+          <div class="property-desc">15억 5,000만원 · 해운대 해변 인접, 고급 아파트, 쇼핑몰 근처</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/대구_대봉서한포레스트(주상복합).jpeg" alt="대구 대봉서한포레스트" />
+        <div class="property-info">
+          <div class="property-title">대봉 서한 포레스트</div>
+          <div class="property-meta">대구광역시 중구 대봉로 240 · 아파트 · 전용 84.96m²</div>
+          <div class="property-desc">6억 1,000만원 · 대구백화점/봉리단길/김광석길 인접, 경대병원역/건들바위역/대봉교역 근처 교통 편리, 학교인근</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/송도_송도 더샵 센트럴시티.jpeg" alt="송도 더샵 센트럴시티" />
+        <div class="property-info">
+          <div class="property-title">송도 더샵 센트럴시티</div>
+          <div class="property-meta">인천광역시 연수구 송도동 · 아파트 · 84m² (25평)</div>
+          <div class="property-desc">7억 2,000만원 · 송도 국제도시, 신도시, 교통 및 인프라 우수</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/광주_신창유탑유블레스리버시티.jpeg" alt="광주 신창유탑유블레스리버시티" />
+        <div class="property-info">
+          <div class="property-title">신창동 유탑유블레스 리버뷰 아파트</div>
+          <div class="property-meta">광주광역시 광산구 신창동 산 98-2번지 · 아파트 · 84㎡ (25평)</div>
+          <div class="property-desc">5억 600만원 · 영산강/수변공원 조망, 주변 산책로/공원/숲세권/역사문화공원 인접, 수완·신창·첨단 유탑 리버시티 프리미엄 라이프 제공</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/대전_장대푸르지오.jpg" alt="대전 장대푸르지오" />
+        <div class="property-info">
+          <div class="property-title">장대 푸르지오</div>
+          <div class="property-meta">대전광역시 유성구 장대동 479 · 아파트 · 약 85m² (25평)</div>
+          <div class="property-desc">4억 9,000만원 · 구암역 도보 약 10~11분 거리, 대덕연구단지 인근, 유성 재래시장 인근</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/울산_천상필그린.jpeg" alt="울산 천상필그린" />
+        <div class="property-info">
+          <div class="property-title">천상 필그린 아파트</div>
+          <div class="property-meta">울산광역시 울주군 범서읍 천상리 300-3 · 아파트 · 84.92m² (25.7평)</div>
+          <div class="property-desc">2억 8,000만원 · 남동향, 편의시설 밀집, 올 리모델링</div>
+        </div>
+      </li>
+      <li class="property-item">
+        <img class="property-img" src="/img/세종_새뜸4단지캐슬앤파밀리에.jpeg" alt="세종 새뜸4단지캐슬앤파밀리에" />
+        <div class="property-info">
+          <div class="property-title">새뜸마을 4단지</div>
+          <div class="property-meta">세종특별자치시 새롬동 · 아파트 · 84m² (25평)</div>
+          <div class="property-desc">7억 2,000만원 (2025년 4월 실거래가 기준) · 코스트코/이마트 차량 8분, 정부세종청사 차량 6분, 학군 인근, 세종남부통합보건지소 도보 10분/세종 충남대병원 차량 14분, 지선·광역버스 이용 편리, 당진영덕고속도로 서세종 IC 차량 15분 거리</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+
+
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <!-- 챗봇 컨테이너: 오른쪽 하단 고정 -->
+  <df-messenger
+    intent="WELCOME"
+    chat-title="챗집"
+    agent-id="55ceeab3-090e-4909-9ff1-d2eb0e49b741"
+    language-code="ko"
+    expand>
+  </df-messenger>
+
+
+
+<!-- 하단 -->
+<footer class="footer-bar">
+  <div class="footer-left">
+    GipZip 소속 | 한양대학교 에리카 ICT융합학부 <br>
+    팀명 | 가보자규 <br>
+    소개 | 2022057983 김가은, 2023005478 김규빈 <br>
+    📞 연락처 | 031-400-5114
+  </div>
+  <div class="footer-bottom-row">
+    <span class="footer-copyright">COPYRIGHT©GipZip. ALL RIGHTS RESERVED.</span>
+  </div>
+</footer>
+
+
+
+<script src="/ChatBot/index.js"></script>
+
+<!-- <script>
+function toggleNav() {
+  var navList = document.getElementById("gn-list");
+  navList.classList.toggle("show");
+}
+</script> -->
+</body>
+</html>
+
+
+ <button id="topBtn" title="맨 위로 이동">&#8679;</button>

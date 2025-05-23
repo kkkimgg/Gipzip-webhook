@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <meta charset="UTF-8">
+  <title>온라인 임장</title>
+  <link rel="stylesheet" href="/css/main2.css">
+  <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mmvw32ddal&callback=initMap"></script> 
+  <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mmvw32ddal&submodules=markerclustering"></script>
+
+  <script src="/js/script2.js" defer></script>
+</head>
+<body>
+
+<header>
+    <!-- 네비게이션 바 -->
+      <nav id="gn-nav">
+        <div class="gn-content">
+          <a href="/Intro/index.html">
+            <img src="/img/GibZiplogo_black.png" height="40" alt="gipziplogo" id="homelogo">
+          </a>
+          <ul class="gn-list" id="list">
+            <li><a href="/">AI 집</a></li>
+            <li><a href="/Design/index.html">온라인 임장</a></li>
+            <li><a href="/ChatBot/index.html">챗봇 zip</a></li>
+          </ul>
+        </div>
+      </nav>
+</header>
+<section id="search-section">
+  <h1>온라인 임장</h1>
+  <p>집 Zip이 제공하는 집의 모든 모음집<br>찾고 계신 집을 검색하여 온라인으로 임장을 즐겨보세요! </p>
+  <div class="search-background">
+    <div class="search-row">
+  <input id="search-bar" type="text" placeholder="검색어를 입력해주세요" />
+  <button id="search-btn">검색</button>
+</div>
+  <div id="suggestions">
+    <p class="suggestion-title">이번 달 GipZip의 추천 Top 3</p>
+    <div class="suggestion">📍 [서울 중구]힐스테이트세운센트럴1단지(도시형) 1동</div>
+    <div class="suggestion">📍 [서울 용산구] 세인트힐</div>
+    <div class="suggestion">📍 [경기도] 푸른 마을 4단지</div>
+  </div>
+</div>
+</section>
+<section id="search-results">
+  <h2>🔍 검색 결과</h2>
+  <div id="result-cards" class="result-card-container"></div>
+</section>
+
+<div id="map-container" style="position:relative;">
+<div id="map"></div>
+<div id="map-controls">
+  <button onclick="moveToRegion('seoul')">서울</button>
+  <button onclick="moveToRegion('gyeonggi')">경기도</button>
+  <button onclick="moveToRegion('gangwon')">강원도</button>
+  <button onclick="moveToRegion('gyeongbuk')">경상북도</button>
+  <button onclick="moveToRegion('chungbuk')">충청북도</button>
+  <button onclick="moveToRegion('chungnam')">충청남도</button>
+  <button onclick="moveToRegion('jeonbuk')">전라북도</button>
+  <button onclick="moveToRegion('jeonnam')">전라남도</button>
+  <button onclick="moveToRegion('gyeongnam')">경상남도</button>
+  <button onclick="moveToRegion('jeju')">제주도</button>
+</div>
+<button id="fit-map-btn" onclick="fitMapToMarkers()"> ⬅️지도 전체 보기 ➡️</button>
+<button id="shrink-map-btn" onclick="shrinkMap()" style="display:none; position:absolute; right:20px;">➡️지도 작게 보기⬅️</button>
+</div>
+
+<div id="showHouseInfo">
+  <div class="info-content">
+    <div class="slider">
+      <button id="prev-btn">
+        <img class="arrow-icon" src="/img/leftbtn.png" alt="왼쪽 버튼" />
+      </button>
+    
+       <!-- 오버레이 컨테이너 시작 -->
+       <div class="image-overlay-container">
+        <img id="info-image" class="info-image" src="/img/aboutbg1.png" alt="집 사진" />
+        <div id="info-image-desc" class="overlay-desc"><span>신축이라서 깔끔한 것이 특징, 하지만 관광지라서 붐빌 수도 있음</span></div>
+      </div>
+      <button id="next-btn">
+        <img class="arrow-icon" src="/img/rightbtn.png" alt="오른쪽 버튼" />
+      </button>
+    </div>
+    <div>
+      <strong id="info-title"></strong><br>
+      <span id="info-desc"></span>
+    </div>
+  </div>
+</div>
+
+  <div id="review-section" style="display:none;">
+  <div id="review-card">
+    <h3 class="review-title">좋은 점</h3>
+    <div id="pros" class="review-list"></div>
+  </div>
+  <div id="review-card">
+    <h3 class="review-title">아쉬운 점</h3>
+    <div id="cons" class="review-list"></div>
+  </div>
+</div>
+
+<form id="inquiry-form" action="https://formspree.io/f/mrbqqrpq" method="POST">
+    <h4>공인중개사에게 문의 남기기</h4>
+    <input type="text" name="name" placeholder="이름을 입력하세요" required>
+  <input type="email" name="email" placeholder="이메일을 입력하세요" required>
+  <textarea name="message" placeholder="문의 내용을 입력하세요" required></textarea>
+  <button type="submit" class="inquiry-form-submit">문의하기</button>
+  </form>
+  <div id="inquiry-success" style="color:#6A5ACD; display:none;">문의가 성공적으로 전송되었습니다!</div>
+</body>
+
+  <!-- 하단 -->
+<footer class="footer-bar">
+  <div class="footer-info">
+    GipZip 소속 | 한양대학교 에리카 ICT융합학부<br>
+    팀명 | 가보자규<br>
+    소개 | 2022057983 김가은, 2023005478 김규빈
+    <div class="footer-bottom-row">
+      <span class="footer-contact">📞 연락처 | 031-400-5114</span>
+      <span class="footer-copyright">COPYRIGHT©GipZip. ALL RIGHTS RESERVED.</span>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+
+  <button id="topBtn" title="맨 위로 이동">&#8679;</button>
+    

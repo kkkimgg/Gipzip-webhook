@@ -1,0 +1,398 @@
+<!-- AI집 html -->
+
+<!-- 
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes, initial-scale=1.0">
+  <title>GipZip</title>
+  <link rel="stylesheet" type="text/css" href="../../../../../Intro/css/main.css">
+</head>
+<body> -->
+    <!-- 네비게이션 바 -->
+    <!-- <header>
+      <nav id="gn-nav">
+        <div class="gn-content">
+          <a href="../../../../../Intro/index.html">
+            <img src="../../../../../Intro/img/GibZiplogo_black.png" height="40" alt="gipziplogo" id="homelogo">
+          </a>
+          <ul class="gn-list" id="list">
+            <li><a href="">AI 집</a></li>
+            <li><a href="../../../../../Design/index.html">온라인 임장</a></li>
+            <li><a href="../../../../../Contact/index.html">전문 챗봇</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>  -->
+
+
+<!-- css위치&index.html: 일단 내 코드 위치로 바꿈 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"> <!-- 이게 있어야, 결과가 카드안에서 보임. -->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes, initial-scale=1.0">
+  <title>GipZip</title>
+  <link rel="stylesheet" type="text/css" href="/css/styles.css">
+</head>
+<body>
+    <!-- 네비게이션 바 -->
+    <header>
+      <nav id="gn-nav">
+        <div class="gn-content">
+          <a href="/Intro/index.html">
+            <img src="/img/GibZiplogo_black.png" height="40" alt="gipziplogo" id="homelogo">
+          </a>
+          <ul class="gn-list" id="list">
+            <li><a href="/">AI 집</a></li>
+            <li><a href="/Design/index.html">온라인 임장</a></li>
+            <li><a href="/ChatBot/index.html">챗봇 zip</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    
+<!-- <!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>주택 추천 서비스</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>맞춤형 주택 추천 서비스</h1>
+  </header> -->
+
+
+
+
+
+
+  
+
+
+  <!-- 상단 컬러 배경 및 타이틀 영역 -->
+<div class="main-bg">
+  <div class="main-bg-content">
+    <h1 class="main-title">AI 집</h1>
+    <p class="main-desc">
+      <strong>AI</strong>가 <strong>라이프스타일</strong>을 분석하여<br>
+      나에게 딱 맞는 집을 추천해드립니다.<br>
+      조건만 입력하여, <strong>나만의 집</strong>을 찾아보세요!
+    </p>
+  </div>
+</div>
+
+
+
+
+
+<!-- 입력 폼을 배경 하단에 겹치게 배치 -->
+<div class="form-float-box">
+
+
+
+<!-- <div class="container"> 지워주기 & index에서는 아래 내용으로 교체하기-->
+<!-- <div class="form-border-box"> -->
+  <div class="aizip-form">
+    <form id="mainForm" action="/recommend" method="post">
+      
+    <div class="form-row">
+      <label for="age">나의 나이는</label>
+      <input type="number" id="age" name="age" 
+             th:value="${age}"
+             placeholder="숫자만 입력" required> 
+             <span>살이고,</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-row tight-gap">
+      <label for="hobby">취미는</label>
+      <input type="text" id="hobby" name="hobby" 
+             th:value="${hobby}" 
+             placeholder="예시: 수영, 산책" required> 
+             <span>이고,</span>
+      </div>  
+    </div>
+
+    <div class="form-row">
+      <label for="facility">원하는 시설은</label>
+      <input type="text" id="facility" name="facility" 
+             th:value="${facility}" 
+             placeholder="(선택사항) 예시: 공원, 병원">
+             <span>입니다.</span>
+    </div>
+    
+    <div class="form-row">
+      <div class="form-row tight-gap">
+      <label for="budget">예산은</label>
+      <input type="text" id="budget" name="budget"
+             th:value="${budget}"
+             placeholder="예시: 5억원, 10억 5천6백만원" 
+             pattern="[0-9억천백만원\\s]+"
+             title="예산은 반드시 '한글 단위+원'로 입력해주세요." 
+             required>
+             <span>미만을 찾고 있어요.</span>
+      </div>
+    </div>
+
+
+    <br><p>▼ 아래에서 주거 형태와 가족 수를 선택해 주세요</p>
+    <div class="form-row">
+      <div class="form-row gap">
+      <label for="housingType">주거형태:</label>
+      <select id="housingType" name="housingType" required>
+        <option value="">선택</option>
+        <option value="아파트" th:selected="${housingType == '아파트'}">아파트</option>
+        <option value="빌라" th:selected="${housingType == '빌라'}">빌라</option>
+        <option value="주택" th:selected="${housingType == '주택'}">주택</option>
+        <option value="오피스텔" th:selected="${housingType == '오피스텔'}">오피스텔</option>
+        <option value="기타" th:selected="${housingType == '기타'}">기타</option>
+      </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-row gap">
+      <label for="familyType">가족 수:</label>
+      <input type="number" id="familyType" name="familyType" 
+             th:value="${familyType}" 
+             placeholder="숫자만 입력" required>
+      </div>
+    </div>
+
+    <div th:if="${errorMessage}" class="error-message">
+      [[${errorMessage}]]
+    </div>
+
+    <button type="submit" id="recommendBtn">나의 집 찾기</button>
+
+  </form>
+</div>
+
+
+
+<!--
+<div class="container">
+  ???<div class="zip-form">  ???
+  <form id="mainForm" action="/recommend" method="post">
+    
+  <div class="input-group">
+    <label for="age">나의 나이는
+    <input type="number" id="age" name="age" 
+           th:value="${age}"
+           placeholder="숫자로 입력해주세요" required> 살이고,</label>
+  </div>
+
+  <div class="input-group">
+    <label for="hobby">취미는
+    <input type="text" id="hobby" name="hobby" 
+           th:value="${hobby}" 
+           placeholder="예시: 수영, 산책" required> 이고,</label>
+  </div>  
+
+  <div class="input-group">
+    <label for="facility">원하는 시설은 (선택사항):
+    <input type="text" id="facility" name="facility" 
+           th:value="${facility}" 
+           placeholder="예시: 공원, 병원"> 입니다.</label>
+  </div>
+  
+  <div class="input-group">
+    <label for="budget">예산은
+    <input type="text" id="budget" name="budget"
+           th:value="${budget}"
+           placeholder="예시: 5억원, 10억 5천6백만원" 
+           pattern="[0-9억천백만원\\s]+"
+           title="예산은 반드시 '한글 단위+원'로 입력해주세요." 
+           required> 미만을 찾고 있어요.</label>
+  </div>
+
+  
+  <br><p>📍아래에서 주거 형태와 가족 형태를 선택해 주세요 👇</p>
+  <div class="input-group">
+    <label for="housingType">주거형태:</label>
+    <select id="housingType" name="housingType" required>
+      <option value="">선택</option>
+      <option value="아파트" th:selected="${housingType == '아파트'}">아파트</option>
+      <option value="빌라" th:selected="${housingType == '빌라'}">빌라</option>
+      <option value="주택" th:selected="${housingType == '주택'}">주택</option>
+      <option value="오피스텔" th:selected="${housingType == '오피스텔'}">오피스텔</option>
+      <option value="기타" th:selected="${housingType == '기타'}">기타</option>
+    </select>
+  </div>
+
+  <div class="input-group">
+    <label for="familyType">가족 형태:</label>
+    <input type="number" id="familyType" name="familyType" 
+           th:value="${familyType}" 
+           placeholder="예: '2'인 가구" required>
+  </div>
+
+  <div th:if="${errorMessage}" class="error-message">
+    [[${errorMessage}]]
+  </div>
+
+  <button type="submit" id="recommendBtn">나의 집 찾기</button>
+-->
+
+ 
+<!-- 로딩창  -->
+ <!--개발때 확인방법: display: flex; 로 바꿔주기 -->
+  <div id="loader-container" class="loader-container" style="display: none;">
+    <div class="loader-popup">
+      <div class="loader"></div>
+      <div id="loading-text" class="loading-text"></div>
+    </div>
+  </div>
+  
+</form>
+</div>
+
+
+
+
+
+
+<!-- 결과 영역 -->
+  <div id="resultSection" th:if="${not #lists.isEmpty(recommendations)}">
+    <h2 style="text-align: center">
+      <img th:src="@{/img/gipjip_character.png}" alt="집 아이콘" class="house-icon">
+      추천결과
+    </h2>
+    <!-- <h2 style="text-align: center;">🏡추천결과</h2> -->
+
+
+
+  <!-- result.html 내용 복붙~ -->
+<!-- 오류 메시지 표시 -->
+  <div th:if="${error}" class="error-message">
+    [[${error}]]
+  </div>
+
+  <!-- 추천 결과 영역 -->
+  <!-- <div th:if="${!#lists.isEmpty(recommendations)}">
+    <div class="carousel-container">
+      <div class="card-wrapper" id="cardWrapper">
+        <div class="recommendation-card" th:each="rec, iStat : ${recommendations}">
+        <h2 th:text="${rec['name']} ?: '기본 추천'"></h2>
+        <p><strong>📍 주소:</strong> <span th:text="${rec['주소']} ?: '주소 정보 없음'"></span></p>
+        <p><strong>📏 크기:</strong> <span th:text="${rec['크기']} ?: '크기 정보 없음'"></span> </p>
+        <p><strong>💰 가격:</strong> <span th:text="${rec['가격']} ?: '가격 정보 없음'"></span></p>
+        <p><strong>📑 경매정보:</strong> <span th:text="${rec['경매정보']} ?: '정보 없음'"></span></p>
+        <p><strong>🏞️ 주변시설:</strong> <span th:text="${rec['주변시설']} ?: '정보 없음'"></span></p>
+        <button class="map-btn" th:attr="data-index=${iStat.index}">🗺️ 이 위치 보기</button>
+      </div>
+    </div> -->
+
+  <!-- 추천 결과 영역 : Services에서는 key가 영문이라서, 여기서도 영문으로. -->
+  <div th:if="${!#lists.isEmpty(recommendations)}">
+    <div class="carousel-container">
+      <div class="scrollbar-outer">
+      <div class="card-wrapper" id="cardWrapper">
+        <div class="recommendation-card" th:each="rec, iStat : ${recommendations}">
+        <h2 th:text="${rec['name']} ?: '기본 추천'"></h2>
+        <p>
+          <img th:src="@{/img/security-pin.png}" alt="주소" style="height:1.3em;vertical-align:middle;">
+          <strong>주소:</strong>
+          <span th:text="${rec['address']} ?: '주소 정보 없음'"></span>
+        </p>
+        
+        <p>
+          <img th:src="@{/img/ruler.png}" alt="크기" style="height:1.3em;vertical-align:middle;">
+          <strong>크기:</strong>
+          <span th:text="${rec['size']} ?: '크기 정보 없음'"></span>
+        </p>
+
+        <p>
+          <img th:src="@{/img/south-korean-won.png}" alt="가격" style="height:1.3em;vertical-align:middle;">
+          <strong>가격:</strong>
+          <span th:text="${rec['price']} ?: '가격 정보 없음'"></span>
+        </p>
+
+        <p>
+          <img th:src="@{/img/auction (1).png}" alt="경매정보" style="height:1.3em;vertical-align:middle;">
+          <strong>경매정보:</strong>
+          <span th:text="${rec['auction']} ?: '정보 없음'"></span>
+        </p>
+
+        <p>
+          <img th:src="@{/img/smart-city.png}" alt="주변시설" style="height:1.3em;vertical-align:middle;">
+          <strong>주변시설:</strong>
+          <span th:text="${rec['facilities']} ?: '정보 없음'"></span>
+        </p>
+        
+        <button class="map-btn" th:attr="data-index=${iStat.index}">
+          <img th:src="@{/img/magnifier.png}" alt="지도" style="height:1.5em;vertical-align:middle;">
+           지도에서 위치 보기
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- 지도 컨테이너 -->
+    <!-- <div class="map-container">
+      <button class="map-reset-btn" onclick="resetMap()">🔁 전체 지도 보기</button>
+      <div id="map" style="height:500px;"></div>
+    </div>
+  </div> -->
+    <!-- 지도 컨테이너 -->
+  <div class="map-container">
+    <button class="map-reset-btn" onclick="resetMap()">
+      <img src="/img/map.png" alt="전체 지도 보기" style="height:1.5em; vertical-align:middle; margin-right:0.3em;">
+      전체 지도 보기
+    </button>
+    <div id="map" style="height:500px;"></div>
+  </div>
+
+
+
+
+
+
+  <script th:src="@{'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=' + ${naverMapClientId} + '&callback=initMap'}"></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    // 서버에서 내려주는 데이터만 변수로 선언
+    const recommendations = /*[[${recommendations}]]*/ [];
+    /*]]>*/
+  </script>
+  </body>
+  </html>
+
+
+
+
+
+  <div class="go-btn">
+    <a href="https://www.iros.go.kr/index.jsp">
+      <img src="../../../../img/korci.png" alt="대한민국 대법원 사이트 바로가기" class="Ci-btn"></a>
+    <a href="https://land.naver.com/">
+      <img src="../../../../img/naverbtn.png" alt="네이버페이부동산 사이트 바로가기" class="Ci-btn"></a>
+  </div>
+
+<!-- 하단 -->
+<footer class="footer-bar">
+  <div class="footer-left">
+    GipZip 소속 | 한양대학교 에리카 ICT융합학부 <br>
+    팀명 | 가보자규 <br>
+    소개 | 2022057983 김가은, 2023005478 김규빈 <br>
+    📞 연락처 | 031-400-5114
+  </div>
+  <div class="footer-bottom-row">
+    <span class="footer-copyright">COPYRIGHT©GipZip. ALL RIGHTS RESERVED.</span>
+  </div>
+</footer>
+
+  <script src="/js/script.js"></script>
+
+<!-- 일정 스크롤 시, 맨 위로 이동 -->
+<button id="topBtn" title="맨 위로 이동">&#8679;</button>
+
+
+
+
